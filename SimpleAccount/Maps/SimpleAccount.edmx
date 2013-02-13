@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="SimpleAccountModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityContainer Name="SimpleAccountModelStoreContainer">
+    <EntitySet Name="Accounts1" EntityType="SimpleAccountModel.Store.Accounts1" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="AccountType" EntityType="SimpleAccountModel.Store.AccountType" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="AccountsAccountTypes" Association="SimpleAccountModel.Store.AccountsAccountTypes">
+      <End Role="Accounts" EntitySet="Accounts1" />
+      <End Role="AccountTypes" EntitySet="AccountType" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Accounts1">
+    <Key>
+      <PropertyRef Name="IDAccount" />
+    </Key>
+    <Property Name="IDAccount" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Description" Type="varchar" Nullable="false" MaxLength="100" />
+    <Property Name="IDAccountType" Type="int" Nullable="false" />
+    <Property Name="IDUser" Type="int" Nullable="false" />
+    <Property Name="LastUpdate" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="AccountType_IDAccountType" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="AccountType">
+    <Key>
+      <PropertyRef Name="IDAccountType" />
+    </Key>
+    <Property Name="IDAccountType" Type="int" Nullable="false" />
+    <Property Name="Description" Type="varchar" Nullable="false" MaxLength="100" />
+    <Property Name="LastUpdate" Type="datetime" Nullable="false" />
+    <Property Name="IDUser" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <Association Name="AccountsAccountTypes">
+    <End Role="Accounts" Type="SimpleAccountModel.Store.Accounts1" Multiplicity="*" />
+    <End Role="AccountTypes" Type="SimpleAccountModel.Store.AccountType" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="AccountTypes">
+        <PropertyRef Name="IDAccountType" />
+      </Principal>
+      <Dependent Role="Accounts">
+        <PropertyRef Name="AccountType_IDAccountType" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="SimpleAccountModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="SimpleAccountEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Accounts1" EntityType="SimpleAccountModel.Account" />
+          <EntitySet Name="AccountType" EntityType="SimpleAccountModel.AccountType" />
+          <AssociationSet Name="AccountsAccountTypes" Association="SimpleAccountModel.AccountsAccountTypes">
+            <End Role="Accounts" EntitySet="Accounts1" />
+            <End Role="AccountTypes" EntitySet="AccountType" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Account">
+          <Documentation>
+            <Summary>Holds information about Accounts</Summary>
+            <LongDescription>Holds information about each Account and wich AccountType it corresponds to</LongDescription>
+          </Documentation>
+          <Key>
+            <PropertyRef Name="IDAccount" />
+          </Key>
+          <Property Name="IDAccount" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="IDAccountType" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AccountType" Relationship="SimpleAccountModel.AccountsAccountTypes" FromRole="Accounts" ToRole="AccountTypes" />
+          <Property Type="Int32" Name="IDUser" Nullable="false" />
+          <Property Type="String" Name="LastUpdate" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AccountType">
+          <Key>
+            <PropertyRef Name="IDAccountType" />
+          </Key>
+          <Property Type="Int32" Name="IDAccountType" Nullable="false" />
+          <Property Type="String" Name="Description" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LastUpdate" Nullable="false" annotation:StoreGeneratedPattern="None" />
+          <Property Type="String" Name="IDUser" Nullable="false" />
+        </EntityType>
+        <Association Name="AccountsAccountTypes">
+          <End Type="SimpleAccountModel.Account" Role="Accounts" Multiplicity="0..1" />
+          <End Type="SimpleAccountModel.AccountType" Role="AccountTypes" Multiplicity="1" />
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="SimpleAccountModelStoreContainer" CdmEntityContainer="SimpleAccountEntities">
+    <EntitySetMapping Name="Accounts1">
+      <EntityTypeMapping TypeName="IsTypeOf(SimpleAccountModel.Account)">
+        <MappingFragment StoreEntitySet="Accounts1">
+          <ScalarProperty Name="IDAccount" ColumnName="IDAccount" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="IDAccountType" ColumnName="IDAccountType" />
+          <ScalarProperty Name="IDUser" ColumnName="IDUser" />
+          <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AccountType">
+      <EntityTypeMapping TypeName="IsTypeOf(SimpleAccountModel.AccountType)">
+        <MappingFragment StoreEntitySet="AccountType">
+          <ScalarProperty Name="IDAccountType" ColumnName="IDAccountType" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
+          <ScalarProperty Name="IDUser" ColumnName="IDUser" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="AccountsAccountTypes" TypeName="SimpleAccountModel.AccountsAccountTypes" StoreEntitySet="Accounts1">
+      <EndProperty Name="AccountTypes">
+        <ScalarProperty Name="IDAccountType" ColumnName="AccountType_IDAccountType" />
+      </EndProperty>
+      <EndProperty Name="Accounts">
+        <ScalarProperty Name="IDAccount" ColumnName="IDAccount" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
